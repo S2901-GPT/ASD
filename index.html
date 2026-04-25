@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pen</title>
+  </head>
+  <body>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خريطة التوحد الشاملة</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        /* Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f172a; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155; 
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #475569; 
+        }
+
+        /* Animation */
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(2rem); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-up {
+            animation: slideUpFade 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-50 flex flex-col md:flex-row text-slate-800">
+
+    <aside class="w-full md:w-80 bg-slate-900 text-slate-300 flex-shrink-0 flex flex-col h-auto md:h-screen sticky top-0 overflow-y-auto custom-scrollbar shadow-2xl z-20">
+        <div class="p-6 bg-slate-950 border-b border-slate-800">
+            <h1 class="text-2xl font-bold text-white flex items-center gap-3 mb-2">
+                <i data-lucide="brain" class="text-blue-400 w-8 h-8"></i>
+                طيــف سعــد
+            </h1>
+            <p class="text-xs text-slate-400 leading-relaxed">
+                تفريغ كامل ومطابق للخرائط المعرفية الـ 16 الخاصة باضطراب طيف التوحد للأفراد القادرين لفظياً.
+            </p>
+        </div>
+        <nav id="sidebar-nav" class="flex-1 p-4"></nav>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto p-4 md:p-10 lg:p-16 relative">
+        <div class="max-w-4xl mx-auto">
+            
+            <div class="flex bg-blue-50 text-blue-800 p-4 rounded-xl border border-blue-200 mb-8 items-start gap-3 shadow-sm">
+                <i data-lucide="info" class="w-6 h-6 flex-shrink-0 mt-0.5 text-blue-600"></i>
+                <p class="text-sm font-medium leading-relaxed">
+                    <strong>مرحباً بك في الدليل الشامل:</strong> هذا القسم يضم <strong>جميع النقاط الدقيقة</strong> المذكورة في الخرائط الأربع التي تفضلت برفعها، دون أي اختصار. قمنا بتنظيمها في قائمة جانبية، وأضفنا "مثالاً واقعياً" لكل قسم لترجمة هذه المصطلحات إلى مشاعر حية.
+                </p>
+            </div>
+
+            <div id="main-content-card" class="rounded-3xl shadow-xl overflow-hidden bg-white border border-slate-100">
+                </div>
+            
+        </div>
+    </main>
+
+    <script>
+        // قاعدة البيانات الشاملة
+        const autismData = [
+            {
+                id: "social", group: "التفاعل والمشاعر", icon: "users", title: "القسم الاجتماعي",
+                color: "bg-blue-500", lightColor: "bg-blue-50", textColor: "text-blue-700",
+                points: ["صعوبة فهم الإشارات الاجتماعية", "صعوبة قراءة لغة الجسد", "صعوبة فهم النوايا أو التلميحات", "تعب اجتماعي سريع", "تفضيل العزلة في بعض الأحيان", "صعوبة بدء المحادثات أو إنهائها", "صعوبة الحفاظ على تواصل بصري مريح", "تفسير غير دقيق لتعبيرات الوجه", "صعوبة فهم السياق الاجتماعي", "تجنب المواقف الاجتماعية المعقدة"],
+                example: "تخيل أنك في غرفة وكل من فيها يتحدثون لغة لا تعرف منها سوى كلمات بسيطة، وعليك أن تبتسم وترد عليهم بناءً على نبرة أصواتهم فقط. هذا هو الجهد الذي يبذله الفرد لفهم 'النوايا ولغة الجسد'. لذلك يحدث 'التعب الاجتماعي السريع' ويفضل العزلة لشحن طاقته."
+            },
+            {
+                id: "communication", group: "التفاعل والمشاعر", icon: "message-square", title: "قسم التواصل",
+                color: "bg-teal-500", lightColor: "bg-teal-50", textColor: "text-teal-700",
+                points: ["التفسير الحرفي للكلام", "صعوبة فهم الفكاهة أو المعاني غير المباشرة", "مهارات لغوية جيدة ولكن تفاعل اجتماعي محدود", "صعوبة تنظيم تدفق المحادثة", "عدم القدرة أحياناً على الإيجاز", "تقديم تفاصيل أكثر من اللازم", "تكرار نفس الموضوع أو الفكرة", "صعوبة تغيير الموضوع", "استخدام نبرة صوت غير متسقة مع الموقف", "صعوبة فهم الإيماءات المصاحبة للكلام"],
+                example: "عندما تقول له: 'لقد طار عقلي من الفرح'، قد يتخيل حرفياً عقلاً يطير، مما يربكه لثوانٍ قبل أن يترجم المعنى المجازي. وعندما يسأل عن شيء يحبه، يعطيك 'تفاصيل أكثر من اللازم' لأنه يفترض أنك مهتم بنفس القدر الدقيق الذي يهتم هو به."
+            },
+            {
+                id: "behavior", group: "التفاعل والمشاعر", icon: "settings", title: "القسم السلوكي",
+                color: "bg-purple-500", lightColor: "bg-purple-50", textColor: "text-purple-700",
+                points: ["الالتزام بالروتين", "مقاومة التغيير المفاجئ", "سلوكيات متكررة", "اهتمامات محددة ومكثفة", "عدم الراحة عند تغير التوقعات", "طقوس يومية ثابتة", "صعوبة التكيف مع البيئات الجديدة", "تفضيل الأنماط المتوقعة", "تكرار الأنشطة نفسها", "الحساسية للتغيرات الصغيرة"],
+                example: "الروتين بالنسبة له ليس 'مللاً'، بل هو 'شريان حياة'. العالم الخارجي فوضوي ومخيف ومليء بالمفاجآت الحسية. عندما يضع 'طقوساً ثابتة' (كشرب القهوة في كوب محدد والجلوس في زاوية معينة)، فهو يبني درعاً من الأمان للتخفيف من التوتر."
+            },
+            {
+                id: "emotion", group: "التفاعل والمشاعر", icon: "heart", title: "العواطف والتنظيم العاطفي",
+                color: "bg-amber-500", lightColor: "bg-amber-50", textColor: "text-amber-700",
+                points: ["صعوبة وصف المشاعر بدقة", "شدة استجابة عاطفية غير متسقة", "تأخر فهم المشاعر أثناء الموقف", "صعوبة التعبير عن الاحتياجات العاطفية", "تعب بعد التفاعل الاجتماعي", "تقلبات مزاجية غير مفهومة للآخرين", "صعوبة تهدئة النفس", "التأثر السريع بالضغط الاجتماعي", "صعوبة إظهار التعاطف ظاهرياً رغم الشعور به داخلياً", "استجابات عاطفية متأخرة"],
+                example: "قد يتلقى خبراً حزيناً ولا يبكي فوراً (تأخر الاستجابة). الدماغ يقوم بجمع المعلومات ولكنه لا يوصلها فوراً لمركز المشاعر. وبعد يومين، وهو يغسل الأطباق، ينفجر بالبكاء فجأة. داخلياً هو يشعر بـ 'تعاطف' عميق جداً، لكن ملامح وجهه لا تترجم ذلك بوضوح للآخرين."
+            },
+            {
+                id: "sensory", group: "الحواس والأعصاب", icon: "eye", title: "القسم الحسي",
+                color: "bg-blue-600", lightColor: "bg-blue-50", textColor: "text-blue-800",
+                points: ["حساسية للأصوات", "حساسية للضوء", "حساسية للمس", "حساسية للروائح", "انزعاج من الضوضاء", "الحاجة لبيئة حسية مستقرة", "تضخيم أو تقليل الإحساس", "صعوبة في تجاهل المثيرات", "تشتت بالمنبهات الحسية", "ردود فعل قوية للمثيرات"],
+                example: "الدماغ هنا يفتقر إلى 'الفلتر'. صوت المكيف، طنين الثلاجة، إضاءة الفلورسنت، ورائحة عطر الشخص المجاور، كلها تدخل الدماغ بنفس مستوى الأهمية وبصوت عالٍ جداً، مما يسبب استنزافاً هائلاً (تشتت المثيرات) قد يؤدي للانهيار إذا لم يجد بيئة مستقرة."
+            },
+            {
+                id: "food", group: "الحواس والأعصاب", icon: "apple", title: "الغذاء والحساسية الحسية",
+                color: "bg-emerald-500", lightColor: "bg-emerald-50", textColor: "text-emerald-700",
+                points: ["حساسية لملمس الطعام", "رفض الأطعمة بسبب الملمس أو الرائحة", "تفضيل أطعمة محددة", "صعوبة في تجربة أطعمة جديدة", "أنماط أكل متكررة", "حساسية لدرجة الحرارة", "تجنب خلط الأطعمة", "تفضيل ألوان معينة للأطعمة", "رفض مفاجئ لأطعمة مألوفة", "ربط الطعام بالراحة الحسية"],
+                example: "تناول الطعام ليس مجرد تذوق؛ هو تجربة حسية كاملة. ملمس الموز الطري أو البصل المطبوخ قد يكون بالنسبة لدماغه منفرداً كأنه يمضغ مطاطاً. 'تجنب خلط الأطعمة' يريحه من مفاجأة دماغه بملمسين مختلفين في لقمة واحدة."
+            },
+            {
+                id: "neural", group: "الحواس والأعصاب", icon: "brain", title: "القسم العصبي",
+                color: "bg-indigo-500", lightColor: "bg-indigo-50", textColor: "text-indigo-700",
+                points: ["اختلافات في معالجة المعلومات", "بطء أو سرعة في الاستجابة", "تعب ذهني سريع", "صعوبة التبديل بين المهام", "فرط التركيز", "حمل معرفي عالٍ", "صعوبة في تصفية المعلومات", "استجابات غير متوقعة للمواقف", "حساسية للتوتر", "تقلبات في مستويات الأداء"],
+                example: "تخيل أن دماغك حاسوب يفتح 50 نافذة متصفح في نفس الوقت. هذا هو 'الحمل المعرفي العالي'. عندما يطلب منه مديره الانتقال من مهمة 'أ' إلى مهمة 'ب'، يحتاج الحاسوب لوقت لإغلاق النوافذ القديمة وفتح جديدة، وهذا ما يفسر 'صعوبة التبديل بين المهام'."
+            },
+            {
+                id: "executive", group: "الحواس والأعصاب", icon: "list-todo", title: "الوظائف التنفيذية",
+                color: "bg-orange-500", lightColor: "bg-orange-50", textColor: "text-orange-700",
+                points: ["صعوبة ترتيب الأولويات", "صعوبة تلخيص المعلومات", "صعوبة في إدارة الوقت", "تشتت الانتباه تحت مثيرات متعددة", "الحاجة لخطوات واضحة", "صعوبة في بدء المهام", "صعوبة في إنهاء المهام", "ضعف التخطيط المسبق", "صعوبة اتباع التعليمات المعقدة", "الاعتماد على الروتين للتنظيم"],
+                example: "الشخص يعرف ما يجب عليه فعله، لكن 'المدير التنفيذي' في الدماغ غائب. قد يجلس لساعات أمام ورقة البحث (صعوبة في بدء المهام) لأنه لا يعرف أي خطوة هي الأولى. إذا أعطيته خطة مرقمة (1، 2، 3)، سينجزها بكفاءة تفوق الجميع."
+            },
+            {
+                id: "motor", group: "الحواس والأعصاب", icon: "activity", title: "المهارات الحركية",
+                color: "bg-rose-500", lightColor: "bg-rose-50", textColor: "text-rose-700",
+                points: ["تباينات في التوازن", "صعوبة في التنسيق بين العين واليد", "بطء تعلم المهارات الحركية", "إدراك غير متسق للمسافات", "حركات غير دقيقة أحياناً", "صعوبة في التحكم الحركي الدقيق", "تأخر زمن رد الفعل الحركي", "شد أو ارتخاء عضلي", "صعوبة في الأنشطة الحركية الدقيقة", "عدم الاتساق في سرعة التنفيذ"],
+                example: "الدماغ العبقري في الرياضيات قد يجد عناءً شديداً في التقاط كرة تُرمى إليه (التنسيق بين العين واليد)، أو قد يبدو خط يده سيئاً للغاية (صعوبة التحكم الدقيق). الجسد لا ينفذ أوامر الدماغ بنفس السلاسة المعتادة."
+            },
+            {
+                id: "driving", group: "الحواس والأعصاب", icon: "car", title: "القيادة",
+                color: "bg-teal-600", lightColor: "bg-teal-50", textColor: "text-teal-800",
+                points: ["تعب ذهني أعلى أثناء القيادة", "حساسية لأضواء الليل", "صعوبة التعامل مع مثيرات متعددة", "الحاجة لوقت أطول لاكتساب مهارات القيادة", "عدم الاتساق في الأداء بناءً على الإجهاد الحسي", "بطء اتخاذ القرار", "صعوبة في تقدير المسافات", "تشتت بسبب الأصوات", "تعب أسرع أثناء القيادة الطويلة", "الحاجة لبيئة قيادة هادئة"],
+                example: "القيادة تتطلب تزامناً مثالياً (تراقب المرايا، تسمع الأبواق، تقدر المسافة، وتقرر). للمصاب بالتوحد، كل هذا يشكل هجوماً حسياً. لذلك هو يحتاج إلى صمت تام في السيارة، وقد يتعب جداً بعد نصف ساعة فقط من القيادة في الزحام."
+            },
+            {
+                id: "cognitive", group: "الإدراك والاستقلالية", icon: "puzzle", title: "الجانب المعرفي (الإدراكي)",
+                color: "bg-blue-500", lightColor: "bg-blue-50", textColor: "text-blue-700",
+                points: ["تفكير تحليلي قوي", "اهتمام قوي بالتفاصيل", "صعوبة التعامل مع الغموض", "تفضيل الأنظمة والقواعد", "ذاكرة قوية لمجالات الاهتمام", "صعوبة عرضية في التفكير المجرد", "تركيز عميق على موضوع واحد", "صعوبة في التبديل بين الأفكار", "معالجة المعلومات غير الخطية", "دقة ملاحظة عالية"],
+                example: "بينما ينظر الجميع للغابة، هو يرى الورقة بدقة مجهرية (دقة الملاحظة). ذاكرته تشبه قرصاً صلباً يحتفظ بكل تفصيلة صغيرة في موضوع شغفه. لكنه ينهار إذا كانت التعليمات 'غامضة' ولم تتبع قواعد منطقية صارمة."
+            },
+            {
+                id: "adaptability", group: "الإدراك والاستقلالية", icon: "refresh-cw", title: "القدرة على التكيف والمرونة",
+                color: "bg-emerald-500", lightColor: "bg-emerald-50", textColor: "text-emerald-700",
+                points: ["صعوبة التكيف مع التغيير غير المتوقع", "الحاجة لمزيد من الوقت للتكيف", "توتر عند تعطل الروتين", "تفضيل البيئات المألوفة", "صعوبة التعامل مع المفاجآت", "الاعتماد على التخطيط المسبق", "مقاومة الحلول البديلة", "التمسك بحل واحد"],
+                example: "إذا تم تغيير موعد اجتماع مفاجئ، الدماغ النمطي سيتكيف خلال ثوانٍ. أما دماغ المصاب بالتوحد فقد يصاب بتجمد وتوتر شديد، لأن الخريطة الذهنية ليومه قد تمزقت ويحتاج لوقت طويل لإعادة بنائها (مقاومة التغيير غير المتوقع)."
+            },
+            {
+                id: "relationships", group: "الإدراك والاستقلالية", icon: "handshake", title: "العلاقات الاجتماعية (العميقة)",
+                color: "bg-purple-600", lightColor: "bg-purple-50", textColor: "text-purple-800",
+                points: ["صعوبة تكوين صداقات جديدة", "فهم محدود لديناميات العلاقات", "تفضيل العلاقات العميقة على السطحية", "سوء تفسير نوايا الآخرين", "صعوبة الحفاظ على العلاقات", "الحاجة لمساحة شخصية أكبر", "تجنب التفاعل الجماعي", "صعوبة قراءة الحدود الاجتماعية"],
+                example: "هو لا يحب المجاملات السطحية (كيف حالك؟ بخير). يفضل أن يجلس مع شخص واحد يتحدثان بشغف عن نظرية فيزيائية لمدة ساعتين (علاقة عميقة). يجد صعوبة في الحفاظ على الأصدقاء لأنه قد ينسى التواصل معهم لأشهر، ليس تقصيراً بل اختلافاً في تقدير الزمن والاحتياجات."
+            },
+            {
+                id: "independence", group: "الإدراك والاستقلالية", icon: "home", title: "الاستقلالية اليومية",
+                color: "bg-amber-500", lightColor: "bg-amber-50", textColor: "text-amber-700",
+                points: ["صعوبة إدارة المهام اليومية", "الاعتماد على الروتين للإنجاز", "صعوبة اتخاذ قرارات بسيطة", "تأخير بدء المهام", "الحاجة لتعليمات واضحة", "نسيان بعض الخطوات", "صعوبة تنظيم الأنشطة", "الاعتماد على الأجهزة المساعدة"],
+                example: "قد يكون مدير قسم التكنولوجيا في شركة، ولكنه يقف حائراً أمام الثلاجة لمدة 10 دقائق لأنه غير قادر على 'اتخاذ قرار بسيط' بشأن ماذا يأكل. يحتاج إلى منبهات وجداول مكتوبة ليقوم بأشياء بديهية كدفع الفواتير أو ترتيب غرفته."
+            },
+            {
+                id: "work", group: "الإدراك والاستقلالية", icon: "briefcase", title: "التعلم والعمل",
+                color: "bg-pink-500", lightColor: "bg-pink-50", textColor: "text-pink-700",
+                points: ["أداء قوي في مجالات محددة", "صعوبة في المهام متعددة الخطوات", "الحاجة لبيئة عمل منظمة", "حساسية للنقد", "صعوبة عرضية في العمل الجماعي", "تفضيل العمل الفردي", "تعب سريع في البيئات المزدحمة", "تركيز عالٍ عند الانتباه"],
+                example: "موظف يعادل إنتاجه ثلاثة أشخاص عندما يعمل بمفرده على مشروع يحبه (أداء قوي وتركيز عالٍ). لكن إذا وضعته في مكتب مفتوح (Open Space) وطلبت منه العمل ضمن فريق يتطلب مهارات سياسية ومجاملات، سينهار أداؤه تماماً (تعب سريع وصعوبة في العمل الجماعي)."
+            },
+            {
+                id: "self_awareness", group: "الإدراك والاستقلالية", icon: "user-check", title: "الوعي بالذات",
+                color: "bg-teal-500", lightColor: "bg-teal-50", textColor: "text-teal-700",
+                points: ["صعوبة فهم الذات تماماً", "تأخر الوعي بالعواطف", "الإفراط في التحليل الذاتي", "صعوبة تحديد نقاط القوة والضعف", "التأثر بالآراء الخارجية", "التردد في اتخاذ القرارات", "الحاجة لردود فعل واضحة", "صعوبة التعبير عن الهوية"],
+                example: "بسبب محاولاته المستمرة طوال حياته لتقليد الآخرين للاندماج (التمويه)، يفقد الاتصال الداخلي بنفسه. يظل يفكر 'هل أنا سعيد حقاً أم أنني أقلد شخصاً سعيداً؟' (الإفراط في التحليل الذاتي)، ويحتاج دائماً لمن يؤكد له مهاراته لأنه يجد صعوبة في تقييم نفسه."
+            }
+        ];
+
+        const groups = [...new Set(autismData.map(item => item.group))];
+        let activeCategory = autismData[0];
+
+        // تحديث القائمة الجانبية
+        function renderSidebar() {
+            const sidebarNav = document.getElementById('sidebar-nav');
+            sidebarNav.innerHTML = '';
+
+            groups.forEach(groupName => {
+                const groupDiv = document.createElement('div');
+                groupDiv.className = 'mb-6';
+                
+                const groupTitle = document.createElement('h2');
+                groupTitle.className = 'text-xs font-black text-slate-500 uppercase tracking-widest mb-3 px-3';
+                groupTitle.innerText = groupName;
+                groupDiv.appendChild(groupTitle);
+
+                const itemsContainer = document.createElement('div');
+                itemsContainer.className = 'space-y-1';
+
+                const groupItems = autismData.filter(item => item.group === groupName);
+                groupItems.forEach(item => {
+                    const isActive = activeCategory.id === item.id;
+                    const btn = document.createElement('button');
+                    
+                    const baseClasses = 'w-full text-right flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200';
+                    const activeClasses = `${item.color} text-white shadow-md font-bold transform translate-x-1`;
+                    const inactiveClasses = 'hover:bg-slate-800 hover:text-white';
+                    
+                    btn.className = `${baseClasses} ${isActive ? activeClasses : inactiveClasses}`;
+                    btn.onclick = () => {
+                        activeCategory = item;
+                        renderApp();
+                    };
+
+                    const iconColorClass = isActive ? 'text-white' : item.textColor.replace('text-', 'text-opacity-70 text-');
+                    const chevronIcon = isActive ? `<i data-lucide="chevron-left" class="w-4 h-4 mr-auto opacity-70"></i>` : '';
+
+                    btn.innerHTML = `
+                        <div class="${iconColorClass}">
+                            <i data-lucide="${item.icon}" class="w-6 h-6"></i>
+                        </div>
+                        <span class="text-sm">${item.title}</span>
+                        ${chevronIcon}
+                    `;
+                    itemsContainer.appendChild(btn);
+                });
+
+                groupDiv.appendChild(itemsContainer);
+                sidebarNav.appendChild(groupDiv);
+            });
+        }
+
+        // تحديث محتوى الكارت الرئيسي
+        function renderMainContent() {
+            const mainCard = document.getElementById('main-content-card');
+            
+            // إعادة تعيين الأنيميشن
+            mainCard.classList.remove('animate-slide-up');
+            void mainCard.offsetWidth; // Trigger reflow
+            mainCard.classList.add('animate-slide-up');
+
+            let pointsHtml = '';
+            activeCategory.points.forEach(point => {
+                pointsHtml += `
+                    <div class="flex items-start gap-3 group">
+                        <div class="w-2 h-2 mt-2.5 rounded-full ${activeCategory.color} opacity-70 group-hover:scale-150 transition-transform"></div>
+                        <p class="text-slate-700 font-medium leading-relaxed group-hover:text-slate-900 transition-colors">
+                            ${point}
+                        </p>
+                    </div>
+                `;
+            });
+
+            mainCard.innerHTML = `
+                <div class="${activeCategory.color} p-8 md:p-10 text-white relative overflow-hidden">
+                    <div class="absolute top-0 right-0 opacity-10 transform translate-x-4 -translate-y-4 scale-150">
+                        <i data-lucide="${activeCategory.icon}" class="w-48 h-48"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <span class="inline-block px-3 py-1 bg-white/20 rounded-full text-sm font-bold backdrop-blur-sm mb-4">
+                            ${activeCategory.group}
+                        </span>
+                        <h2 class="text-3xl md:text-5xl font-black mb-2">${activeCategory.title}</h2>
+                        <p class="text-white/80 text-lg font-medium">يؤثر هذا الجانب على كيفية استجابة الدماغ للمعلومات والمحيط.</p>
+                    </div>
+                </div>
+
+                <div class="p-8 md:p-10">
+                    <div class="flex items-center gap-2 mb-6">
+                        <i data-lucide="activity" class="w-6 h-6 ${activeCategory.textColor}"></i>
+                        <h3 class="text-xl font-bold ${activeCategory.textColor}">السمات والمظاهر الدقيقة:</h3>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-10">
+                        ${pointsHtml}
+                    </div>
+
+                    <div class="rounded-2xl p-6 md:p-8 ${activeCategory.lightColor} border border-slate-100 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-2 h-full ${activeCategory.color}"></div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <i data-lucide="lightbulb" class="w-8 h-8 ${activeCategory.textColor}"></i>
+                            <h4 class="text-2xl font-bold ${activeCategory.textColor}">ترجمة الشعور (مثال واقعي):</h4>
+                        </div>
+                        <p class="text-slate-700 text-lg leading-loose font-medium">
+                            ${activeCategory.example}
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // دالة التحديث الشامل
+        function renderApp() {
+            renderSidebar();
+            renderMainContent();
+            lucide.createIcons(); // تفعيل أيقونات Lucide
+        }
+
+        // تشغيل التطبيق عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', renderApp);
+
+    </script>
+</body>
+</html>
