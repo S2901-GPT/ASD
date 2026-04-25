@@ -1,7 +1,7 @@
 (() => {
-  if (!Array.isArray(window.DATA || DATA)) return;
+  const sourceData = typeof DATA !== "undefined" ? DATA : window.DATA;
+  if (!Array.isArray(sourceData)) return;
 
-  const sourceData = window.DATA || DATA;
   const state = {
     activeId: sourceData[0].id,
     filter: "all",
@@ -76,7 +76,10 @@
           <div class="point-body">
             <span class="tag ${point.type}">${typeLabel[point.type]}</span>
             <h3>${highlight(point.text)}</h3>
-            <p>${highlight(point.example)}</p>
+            <details class="example-accordion">
+              <summary>عرض المثال</summary>
+              <p>${highlight(point.example)}</p>
+            </details>
           </div>
         </div>
       </article>
@@ -87,50 +90,38 @@
     const active = getActive();
     document.body.innerHTML = `
       <div class="reader-shell" style="--accent:${active.accent}">
-        <header class="reader-top">
-          <div class="reader-top-inner">
-            <div class="reader-title">
-              <h1>كنين سعد</h1>
-              <p>شاشة قراءة منظمة: اختر القسم، ثم اقرأ العارض ومثاله مباشرة بدون تشتيت.</p>
-            </div>
-            <input class="reader-search" id="readerSearch" value="${escapeHtml(state.search)}" placeholder="بحث داخل العوارض والأمثلة..." />
+        <aside class="section-panel">
+          <div class="section-panel-head">
+            <h2>الأقسام</h2>
+            <input class="reader-search" id="readerSearch" value="${escapeHtml(state.search)}" placeholder="بحث..." />
           </div>
-        </header>
+          ${renderSections()}
+        </aside>
 
-        <main class="reader-page">
-          <aside class="section-panel">
-            <div class="section-panel-head">
-              <h2>الأقسام</h2>
+        <main class="content-panel">
+          <section class="section-hero">
+            <div class="section-hero-head">
+              <h1>${escapeHtml(active.title)}</h1>
+              <p>${escapeHtml(active.group)} · الأعراض في المساحة الكبرى، والأمثلة داخل أكورديون.</p>
             </div>
-            ${renderSections()}
-          </aside>
+          </section>
 
-          <section class="content-panel">
-            <div class="section-hero">
-              <div class="section-hero-head">
-                <h2>${escapeHtml(active.title)}</h2>
-                <p>${escapeHtml(active.group)}</p>
-              </div>
-            </div>
-
+          <div class="top-row">
             <div class="filter-row">
               <button class="filter-btn ${state.filter === "all" ? "active" : ""}" data-filter="all">الكل</button>
               <button class="filter-btn ${state.filter === "strength" ? "active" : ""}" data-filter="strength">المميزات</button>
               <button class="filter-btn ${state.filter === "challenge" ? "active" : ""}" data-filter="challenge">التحديات</button>
             </div>
+            <div class="notice-mini">هذه السمات ليست بالضرورة موجودة لدى الجميع؛ كل شخص مختلف داخل الطيف.</div>
+          </div>
 
-            <div class="notice-mini">
-              هذه الأعراض والسمات ليست بالضرورة أن تكون موجودة لدى الجميع، وكل شخص مختلف تماماً عن الآخر في تفاصيل تجربته.
-            </div>
+          <details class="section-example">
+            <summary>مثال تحليلي للقسم</summary>
+            <p>"${escapeHtml(active.originalExample)}"</p>
+          </details>
 
-            <div class="analysis-example">
-              <h3>مثال تحليلي للقسم</h3>
-              <p>"${escapeHtml(active.originalExample)}"</p>
-            </div>
-
-            <div class="point-list">
-              ${renderPoints(active)}
-            </div>
+          <section class="point-list">
+            ${renderPoints(active)}
           </section>
         </main>
       </div>
